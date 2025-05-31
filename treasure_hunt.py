@@ -30,7 +30,7 @@ def treasure_hunt():
     while True:
         print("\nCurrent Grid:")
         for row in grid:
-            print("".join(row))
+            print(" ".join(row))
         
         #get player guess
         try:
@@ -51,3 +51,17 @@ def treasure_hunt():
 
         
         #increment attempts counter(adding one to attempts)
+        attempts += 1
+        
+        #checking if guess is correct
+        if guess_row == treasure_row and guess_col == treasure_col:
+          print(f'TREASURE FOUND IN {attempts}ATTEMPTS')
+          break
+        else:
+            grid[guess_row][guess_col] = 'X'
+            hint = give_hint(treasure_col,treasure_row,guess_col,guess_row)
+            print(f'Hint:{hint}')
+
+
+#calling function to run entire game
+treasure_hunt()
