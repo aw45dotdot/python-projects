@@ -11,17 +11,20 @@ scr.tracer(0)
 p = turtle.Turtle()
 p.shape("triangle")
 p.color("red")
-
-
+p.up()
+p.goto(0,-210)
+p.setheading(90)
 
 #score display
 score = 0
 scor_disp = turtle.Turtle()
 scor_disp.hideturtle()
 scor_disp.color("black")
+
+scor_disp.up()
+scor_disp.goto(-220,200)
 scor_disp.write(f"Score: {score}",font=('Calibri',20,'bold'))
-scor_disp.penup()
-scor_disp.goto(250,300)
+
 
 balloons = []
 #game varaible
@@ -35,12 +38,12 @@ running = True
 def move_left():
     x = p.xcor()-20
     if x > -240:
-        p.set(x)
+        p.setx(x)
 
 def move_right():
     x = p.xcor()+20
     if x < +240:
-        p.set(x)
+        p.setx(x)
 
 def ballons_spawn():
     ballon = turtle.Turtle()
@@ -76,29 +79,29 @@ def game_over():
 
 #keybinding
 scr.listen()
-scr.onkey(move_right,"a")
-scr.onkey(move_left,"d")
+scr.onkey(move_right,"d")
+scr.onkey(move_left,"a")
 #game loop using while loop
 
 while running:
     scr.update()
     current_time = time.time()
     if current_time - last_spawn_time > spawn_interval:
-        ballons_spawn
+        ballons_spawn()
         last_spawn_time = current_time
 
     for ballon in balloons[:]:
         ballon.sety(ballon.ycor() - ballon.speed)
         if ballon.ycor() < -250:
-            ballon.remove(ballon)
+            balloons.remove(ballon)
             ballon.hideturtle()
         if p.distance(ballon) < 30:
             if ballon.is_bomb:
                 game_over()
             else:
                 update_score(10)
-            ballon.remove(ballon)
+            balloons.remove(ballon)
             ballon.hideturtle()
     game_speed = max(0.005, game_speed - dif_inc)
-    spawn_interval = max(0.5, spawn_interval - 0.0005)
+    spawn_interval = max(0.005, spawn_interval - 0.0005)
     time.sleep(game_speed)
