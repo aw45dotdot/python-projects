@@ -3,7 +3,7 @@ import turtle
 import time
 
 scr = turtle.Screen()
-scr.setup(1.0,1.0)
+scr.setup(width = 600, height = 600)
 #scr.tracer(0)
 scr.bgcolor("black")
 
@@ -45,3 +45,68 @@ scor_disp.goto(400,200)
 scor_disp.down()
 scor_disp.write(f'Score:{score}',align="left",font=("Calibri",20,"bold"))
 scor_disp.hideturtle()
+
+#paddle movement
+def pad_left():
+    x = paddle.xcor()
+    if x - paddle_width//2 > -290:
+        paddle.setx(x-20)
+    
+def pad_right():
+    x = paddle.xcor()
+    if x + paddle_width//2 > 290:
+        paddle.setx(x+20)
+
+#keyboard functions
+scr.listen()
+scr.onkey(pad_left, "a")
+scr.onkey(pad_right, "d")
+
+#game start flag
+game_start = False
+
+def start_game(x,y):
+    global game_start
+    game_start = True
+
+scr.onclick(start_game)
+
+#game loop
+while True:
+    scr.update()
+    time.sleep(0.1)
+    
+    if not game_start:
+        continue
+    
+    #moving the ball
+    ball.setx(ball.xcor()+ball.dx)
+    ball.sety(ball.ycor()+ball.dy)
+    
+    #ball collision with wall
+    if ball.xcor() > 290 or ball.xcor() < -290:
+        ball.dx *= (-1)
+
+    if ball.ycor() > 290:
+        ball.dy *= (-1)
+    
+    if ball.ycor() > -290:
+        ball.goto(0,0)
+        ball.dy *= (-1)
+        game_start = False
+        score = 0
+        scor_disp.clear()
+        scor_disp.write(f'Score:{score}',align="left",font=("Calibri",20,"bold"))
+
+    #ball coliding with paddle
+    if (ball.ycor() > 290 and ball.ycor() < 290) and (paddle.xcor() - 75 < ball.xcor() , paddle.xcor() + paddle_width - 75):
+        ball.dy *= (-1)
+    
+    #ball collision with bricks
+    
+
+
+
+    if not bricks:
+        print("YOU WIN")
+        break
