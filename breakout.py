@@ -54,7 +54,7 @@ def pad_left():
     
 def pad_right():
     x = paddle.xcor()
-    if x + paddle_width//2 > 290:
+    if x + paddle_width//2 < 290:
         paddle.setx(x+20)
 
 #keyboard functions
@@ -73,7 +73,7 @@ scr.onclick(start_game)
 
 #game loop
 while True:
-    scr.update()
+    scr.update(0)
     time.sleep(0.1)
     
     if not game_start:
@@ -103,9 +103,14 @@ while True:
         ball.dy *= (-1)
     
     #ball collision with bricks
-    
-
-
+    for brick in bricks:
+        if abs(ball.xcor() - brick.xcor()) < 15 and abs(ball.ycor() - brick.ycor()) < 15:
+            ball.dy*=(-1)
+            brick.hideturtle()
+            bricks.remove(brick)
+            score += 1
+            scor_disp.clear()
+            scor_disp.write(f'Score:{score}',align="left",font=("calibri",20,"bold"))
 
     if not bricks:
         print("YOU WIN")
