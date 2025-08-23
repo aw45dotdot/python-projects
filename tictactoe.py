@@ -32,14 +32,38 @@ def is_full(board):
     return True
 
 def play_game():
-    board=[]]
+    board=[]
     for i in range(3):
         row=[]
         for j in range(3):
             row.append(" ")
         board.append(row)
-        
+    
+    
     current_player = "x"
     while True:
         print_board(board)
         print(f"IT'S {current_player}'S TURN")
+        row = int(input("Enter the new(0-2): "))
+        col = int(input("Enter the new(0-2): "))
+        if board[row][col]==" ":
+            board[row][col]=current_player
+        
+        else:
+            print("CELL ALREADY TAKEN")
+            continue
+        
+        winner = check_winner(board) or check_diagonals(board)
+        if winner:
+            print_board(board)
+            print(f'{winner} WIN!')
+            break
+        #check for draw
+        if is_full(board):
+            print_board(board)
+            print("ITS A DRAW")
+            break
+        
+        current_player = "o" if current_player == "X" else "X"
+
+play_game()
